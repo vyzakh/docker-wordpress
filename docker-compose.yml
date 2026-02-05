@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:5.7
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backend
+
+  wordpress:
+    image: wordpress
+    env_file:
+      - .env
+    ports:
+      - "8081:80"   # 👈 expose WordPress to host Nginx
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - backend
+
+volumes:
+  wp_data:
+  db_data:
+
+networks:
+  backend:
